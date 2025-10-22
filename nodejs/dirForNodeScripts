@@ -1,0 +1,23 @@
+import { writeFileSync } from "fs";
+import { Parser } from "json2csv";
+
+const url =
+  "https://www.wolframcloud.com/obj/raghu0891/seventynine?numQuestions=1000&difficulty=easy";
+
+fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    try {
+      // Create a new JSON2CSV parser with flattening enabled
+      const json2csvParser = new Parser({ flatten: true });
+      const csv = json2csvParser.parse(data);
+
+      // Write the CSV data to a file
+      writeFileSync("output.csv", csv);
+
+      console.log("JSON data successfully flattened and saved as output.csv");
+    } catch (error) {
+      console.error(" Error converting JSON to CSV:", error);
+    }
+  })
+  .catch((err) => console.error(" Fetch error:", err));
